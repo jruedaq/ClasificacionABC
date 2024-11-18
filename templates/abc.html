@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clasificación ABC</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      padding: 20px;
+      background-color: #f8f9fa;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    .card {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 0.9em;
+      color: #6c757d;
+    }
+  </style>
+</head>
+<body>
+<div class="container mt-4">
+  <h1 class="text-center mb-4">Clasificación ABC</h1>
+  <form method="post" enctype="multipart/form-data" class="mb-4">
+    <div class="card p-4">
+      <div class="mb-3">
+        <label for="file" class="form-label">Sube un archivo CSV:</label>
+        <input type="file" id="file" name="file" accept=".csv" class="form-control">
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Procesar</button>
+    </div>
+  </form>
+
+  {% if mensaje_error %}
+  <div class="alert alert-danger" role="alert">
+    {{ mensaje_error }}
+  </div>
+  {% endif %}
+
+  {% if resultados %}
+  <div class="card p-4 mb-4">
+    <h2 class="text-center mb-4">Resultados</h2>
+    <table class="table table-bordered table-hover">
+      <thead class="table-dark text-center">
+      <tr>
+        <th>Nombre del Artículo</th>
+        <th>Valor</th>
+        <th>Porcentaje (%)</th>
+        <th>Acumulado (%)</th>
+        <th>Clasificación ABC</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for row in resultados %}
+      <tr>
+        <td>{{ row['nombre'] }}</td>
+        <td class="text-end">{{ row['valor'] }}</td>
+        <td class="text-end">{{ row['porcentaje'] }}</td>
+        <td class="text-end">{{ row['acumulado'] }}</td>
+        <td class="text-center">{{ row['categoria'] }}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="card p-4 mb-4">
+    <h3>Gráficos</h3>
+    <img src="{{ url_for('static', filename='histograma.png') }}" class="img-fluid rounded mb-3">
+    <img src="{{ url_for('static', filename='linea_acumulado.png') }}" class="img-fluid rounded">
+  </div>
+  {% endif %}
+
+  <a href="/" class="btn btn-secondary mt-4 w-100">
+    <i class="fas fa-arrow-left"></i> Regresar al Inicio
+  </a>
+</div>
+<footer>
+  &copy; 2024 Investigación de Operaciones - ITESCAM | Creado por Emily Guadalupe y Juan David Rueda
+</footer>
+<!-- Bootstrap Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Font Awesome -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+</body>
+</html>
