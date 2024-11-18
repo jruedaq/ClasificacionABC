@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clasificación ABC</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .btn-primary {
+            margin-top: 10px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        .category-A {
+            background-color: #ffcccc;
+        }
+        .category-B {
+            background-color: #fff4cc;
+        }
+        .category-C {
+            background-color: #ccffcc;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="text-center my-4">Clasificación ABC</h1>
+    <form method="post" enctype="multipart/form-data" class="mb-4">
+        <div class="mb-3">
+            <label for="file" class="form-label">Sube un archivo CSV:</label>
+            <input type="file" id="file" name="file" accept=".csv" class="form-control" aria-describedby="fileHelp">
+            <div id="fileHelp" class="form-text">El archivo debe estar en formato CSV con columnas como 'nombre' y 'valor'.</div>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Subir y Procesar</button>
+    </form>
+    {% if tabla %}
+    <h2 class="my-4">Resultados</h2>
+    <div class="table-container">
+        <table class="table table-bordered table-striped table-hover">
+            <thead class="table-dark text-center">
+            <tr>
+                <th>Nombre del Artículo</th>
+                <th>Valor</th>
+                <th>Porcentaje (%)</th>
+                <th>Acumulado (%)</th>
+                <th>Clasificación ABC</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in tabla %}
+            <tr class="category-{{ row['categoria'] }}">
+                <td>{{ row['nombre'] }}</td>
+                <td class="text-end">{{ row['valor'] }}</td>
+                <td class="text-end">{{ row['porcentaje'] }}</td>
+                <td class="text-end">{{ row['acumulado'] }}</td>
+                <td class="text-center">{{ row['categoria'] }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <h2 class="my-4">Gráficos</h2>
+    <div class="text-center">
+        <img src="{{ url_for('static', filename='histograma.png') }}" alt="Histograma de Valores" class="img-fluid rounded shadow">
+        <img src="{{ url_for('static', filename='linea_acumulado.png') }}" alt="Porcentaje Acumulado" class="img-fluid rounded shadow">
+    </div>
+    {% endif %}
+</div>
+<footer>
+    &copy; 2024 Investigación de Operaciones - ITESCAM | Proyecto de Clasificación ABC
+</footer>
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
