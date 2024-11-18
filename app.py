@@ -4,16 +4,14 @@ import pandas as pd
 import matplotlib
 matplotlib.use('Agg')  # Usar backend no interactivo para Matplotlib
 import matplotlib.pyplot as plt
-
-# Importar la clase Operations desde el archivo correspondiente
-from Operations import Operations
+from Operations import Operations  # Asegúrate de tener este archivo importable
 
 app = Flask(__name__)
-app.secret_key = 'secret_key'  # Necesario para usar flash messages
+app.secret_key = 'secret_key'  # Requerido para usar flash messages
 
 # Configuración de rutas
-UPLOAD_FOLDER = './uploads'
-STATIC_FOLDER = './static'
+UPLOAD_FOLDER = './tmp/uploads'
+STATIC_FOLDER = './tmp/static'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(STATIC_FOLDER, exist_ok=True)
 
@@ -136,8 +134,8 @@ def colas():
         except Exception as e:
             mensaje_error = f"Error al procesar los datos: {str(e)}"
 
-    # Renderizar la plantilla con los resultados o el mensaje de error
     return render_template('colas.html', resultados=resultados, mensaje_error=mensaje_error)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=False, host='0.0.0.0', port=port)
