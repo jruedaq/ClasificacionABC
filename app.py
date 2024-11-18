@@ -2,9 +2,9 @@ from flask import Flask, request, render_template, redirect, url_for, flash, sen
 import os
 import pandas as pd
 import matplotlib
-matplotlib.use('Agg')  # Usar backend no interactivo para Matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-from Operations import Operations  # Asegúrate de tener este archivo correctamente configurado
+from Operations import Operations
 
 app = Flask(__name__)
 app.secret_key = 'secret_key'
@@ -17,12 +17,10 @@ os.makedirs(STATIC_FOLDER, exist_ok=True)
 
 @app.route('/')
 def home():
-    """Ruta de inicio"""
     return render_template('index.html')
 
 @app.route('/abc', methods=['GET', 'POST'])
 def abc():
-    """Clasificación ABC"""
     resultados = None
     mensaje_error = None
 
@@ -37,19 +35,15 @@ def abc():
             return redirect(request.url)
 
         try:
-            # Guardar el archivo subido
             file_path = os.path.join(UPLOAD_FOLDER, file.filename)
             file.save(file_path)
 
-            # Leer el archivo CSV
             items = pd.read_csv(file_path)
 
-            # Validar columnas requeridas
             if 'nombre' not in items.columns or 'valor' not in items.columns:
                 mensaje_error = "El archivo CSV debe contener las columnas 'nombre' y 'valor'."
                 return render_template('abc.html', resultados=None, mensaje_error=mensaje_error)
 
-            # Procesar datos y calcular ABC
             valor_total = items['valor'].sum()
             items['porcentaje'] = (items['valor'] / valor_total) * 100
             items_ordenados = items.sort_values(by='valor', ascending=False).reset_index(drop=True)
@@ -72,10 +66,8 @@ def abc():
             items_ordenados['porcentaje'] = items_ordenados['porcentaje'].round(2)
             items_ordenados['acumulado'] = items_ordenados['acumulado'].round(2)
 
-            # Convertir el DataFrame en una lista de diccionarios
             resultados = items_ordenados.to_dict(orient='records')
 
-            # Generar gráficos
             plt.figure(figsize=(12, 6))
             colores = ['red' if cat == 'A' else 'yellow' if cat == 'B' else 'green' for cat in categorias]
             plt.bar(items_ordenados['nombre'], items_ordenados['valor'], color=colores)
@@ -108,22 +100,18 @@ def abc():
 
 @app.route('/colas', methods=['GET', 'POST'])
 def colas():
-    """Teoría de Colas"""
     resultados = None
     mensaje_error = None
 
     if request.method == 'POST':
         try:
-            # Leer parámetros desde el formulario
             A = float(request.form.get('A', 0))
             S = float(request.form.get('S', 0))
             n = int(request.form.get('n', 1))
 
-            # Validar que las tasas no sean cero
             if A <= 0 or S <= 0 or n <= 0:
                 mensaje_error = "Los valores de A, S y n deben ser mayores a 0."
             else:
-                # Crear instancia de Operations y calcular métricas
                 operations = Operations(A, S, n)
                 resultados = {
                     "Lq": operations.Lq(),
@@ -144,7 +132,6 @@ def colas():
 def descargar_ejemplo():
     """Permite descargar el archivo de ejemplo inventario.csv"""
     try:
-        # Flask buscará el archivo en el directorio 'static'
         return send_from_directory('static', 'inventario.csv', as_attachment=True)
     except Exception as e:
         flash(f"Error al intentar descargar el archivo: {str(e)}", 'danger')
