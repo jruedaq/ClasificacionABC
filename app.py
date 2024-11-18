@@ -1,28 +1,31 @@
-from flask import Flask, request, render_template, redirect, url_for, flash
+from flask import Flask, request, render_template, redirect, url_for, flash, send_from_directory
 import os
 import pandas as pd
 import matplotlib
 matplotlib.use('Agg')  # Usar backend no interactivo para Matplotlib
 import matplotlib.pyplot as plt
-from Operations import Operations  # Asegúrate de tener este archivo importable
+from Operations import Operations  # Asegúrate de tener este archivo correctamente configurado
 
 app = Flask(__name__)
-app.secret_key = 'secret_key'  # Requerido para usar flash messages
+app.secret_key = 'secret_key'
 
 # Configuración de rutas
 UPLOAD_FOLDER = './tmp/uploads'
-STATIC_FOLDER = './tmp/static'
+STATIC_FOLDER = './static'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(STATIC_FOLDER, exist_ok=True)
 
 @app.route('/')
 def home():
+    """Ruta de inicio"""
     return render_template('index.html')
 
 @app.route('/abc', methods=['GET', 'POST'])
 def abc():
+    """Clasificación ABC"""
     resultados = None
     mensaje_error = None
+
     if request.method == 'POST':
         if 'file' not in request.files:
             flash('No se ha subido ningún archivo.', 'danger')
@@ -105,6 +108,7 @@ def abc():
 
 @app.route('/colas', methods=['GET', 'POST'])
 def colas():
+    """Teoría de Colas"""
     resultados = None
     mensaje_error = None
 
@@ -135,6 +139,16 @@ def colas():
             mensaje_error = f"Error al procesar los datos: {str(e)}"
 
     return render_template('colas.html', resultados=resultados, mensaje_error=mensaje_error)
+
+@app.route('/descargar-ejemplo')
+def descargar_ejemplo():
+    """Permite descargar el archivo de ejemplo inventario.csv"""
+    try:
+        # Flask buscará el archivo en el directorio 'static'
+        return send_from_directory('static', 'inventario.csv', as_attachment=True)
+    except Exception as e:
+        flash(f"Error al intentar descargar el archivo: {str(e)}", 'danger')
+        return redirect(url_for('abc'))
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
