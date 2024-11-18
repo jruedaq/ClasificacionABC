@@ -70,7 +70,12 @@
       </thead>
       <tbody>
       {% for row in resultados %}
-      <tr>
+      <tr class="
+                        {% if row['categoria'] == 'A' %} table-danger
+                        {% elif row['categoria'] == 'B' %} table-warning
+                        {% elif row['categoria'] == 'C' %} table-success
+                        {% endif %}
+                    ">
         <td>{{ row['nombre'] }}</td>
         <td class="text-end">{{ row['valor'] }}</td>
         <td class="text-end">{{ row['porcentaje'] }}</td>
