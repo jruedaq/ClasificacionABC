@@ -100,29 +100,35 @@ def abc():
 
 @app.route('/colas', methods=['GET', 'POST'])
 def colas():
+    """Teoría de Colas"""
     resultados = None
     mensaje_error = None
 
     if request.method == 'POST':
         try:
-            A = float(request.form.get('A', 0))
-            S = float(request.form.get('S', 0))
-            n = int(request.form.get('n', 1))
+            # Leer parámetros desde el formulario
+            A = float(request.form.get('A', 0))  # Tasa de Llegada
+            S = float(request.form.get('S', 0))  # Tasa de Servicio
+            n = int(request.form.get('n', 1))   # Número de Servidores
 
+            # Validar que los valores sean mayores a 0
             if A <= 0 or S <= 0 or n <= 0:
                 mensaje_error = "Los valores de A, S y n deben ser mayores a 0."
             else:
+                # Crear instancia de Operations y calcular métricas
                 operations = Operations(A, S, n)
                 resultados = {
-                    "Lq": operations.Lq(),
-                    "Wq": operations.Wq(),
-                    "Ls": operations.Ls(),
-                    "Ws": operations.Ws(),
+                    "Lq": operations.Lq(),     # Longitud promedio de la línea
+                    "Wq": operations.Wq(),     # Tiempo de espera promedio en la línea
+                    "Ls": operations.Ls(),     # Longitud promedio del sistema
+                    "Ws": operations.Ws(),     # Tiempo de espera promedio en el sistema
+                    "U": operations.U(),       # Porcentaje de ocupación del servidor
+                    "PLs": operations.PLs(),   # Probabilidad de que las personas estén esperando
+                    "Ocio": operations.ocio(), # Tiempo de distracción (ocio)
                 }
 
         except ValueError:
             mensaje_error = "Por favor, introduce valores numéricos válidos."
-
         except Exception as e:
             mensaje_error = f"Error al procesar los datos: {str(e)}"
 
