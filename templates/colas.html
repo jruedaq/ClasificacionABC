@@ -8,20 +8,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            padding: 20px;
             background-color: #f8f9fa;
+            padding: 20px;
         }
         .container {
             max-width: 900px;
             margin: auto;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
-            padding: 20px;
+            background: #fff;
             border-radius: 8px;
-        }
-        .card {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+            padding: 20px;
         }
         footer {
             margin-top: 20px;
@@ -29,87 +25,80 @@
             font-size: 0.9em;
             color: #6c757d;
         }
+        .table th, .table td {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-<div class="container mt-4">
+<div class="container">
     <h1 class="text-center mb-4">Teoría de Colas</h1>
-    <div class="card p-4 mb-4">
-        <form method="post">
-            <div class="mb-3">
-                <label for="A" class="form-label">Tasa de Llegada (A):</label>
-                <input type="number" step="any" id="A" name="A" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="S" class="form-label">Tasa de Servicio (S):</label>
-                <input type="number" step="any" id="S" name="S" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="n" class="form-label">Número de Servidores (n):</label>
-                <input type="number" id="n" name="n" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-primary w-100">Calcular</button>
-        </form>
-    </div>
+    <form method="post">
+        <div class="mb-3">
+            <label for="A" class="form-label">Tasa de Llegada (A):</label>
+            <input type="number" step="any" id="A" name="A" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="S" class="form-label">Tasa de Servicio (S):</label>
+            <input type="number" step="any" id="S" name="S" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="n" class="form-label">Número de Servidores (n):</label>
+            <input type="number" id="n" name="n" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Calcular</button>
+    </form>
 
     {% if mensaje_error %}
-    <div class="alert alert-danger" role="alert">
-        {{ mensaje_error }}
-    </div>
+    <div class="alert alert-danger mt-4">{{ mensaje_error }}</div>
     {% endif %}
 
     {% if resultados %}
-    <div class="card p-4">
-        <h2 class="text-center mb-4">Resultados</h2>
-        <table class="table table-bordered table-hover">
-            <thead class="table-dark text-center">
-            <tr>
-                <th>Métrica</th>
-                <th>Valor</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>Longitud promedio de la línea (Lq)</td>
-                <td class="text-end">{{ resultados.Lq }}</td>
-            </tr>
-            <tr>
-                <td>Tiempo de espera promedio en la línea (Wq)</td>
-                <td class="text-end">{{ resultados.Wq }}</td>
-            </tr>
-            <tr>
-                <td>Longitud promedio del sistema (Ls)</td>
-                <td class="text-end">{{ resultados.Ls }}</td>
-            </tr>
-            <tr>
-                <td>Tiempo de espera promedio en el sistema (Ws)</td>
-                <td class="text-end">{{ resultados.Ws }}</td>
-            </tr>
-            <tr>
-                <td>Porcentaje de ocupación del servidor (U)</td>
-                <td class="text-end">{{ resultados.U }}</td>
-            </tr>
-            <tr>
-                <td>Probabilidad de que las personas estén esperando (PLs)</td>
-                <td class="text-end">{{ resultados.PLs }}</td>
-            </tr>
-            <tr>
-                <td>Tiempo de distracción (ocio)</td>
-                <td class="text-end">{{ resultados.Ocio }}</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+    <h2 class="mt-4">Resultados</h2>
+    <table class="table table-bordered table-hover mt-3">
+        <thead class="table-dark">
+        <tr>
+            <th>Métrica</th>
+            <th>Valor</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Longitud promedio de la línea (Lq)</td>
+            <td>{{ resultados.Lq }}</td>
+        </tr>
+        <tr>
+            <td>Tiempo de espera promedio en la línea (Wq)</td>
+            <td>{{ resultados.Wq }}</td>
+        </tr>
+        <tr>
+            <td>Longitud promedio del sistema (Ls)</td>
+            <td>{{ resultados.Ls }}</td>
+        </tr>
+        <tr>
+            <td>Tiempo de espera promedio en el sistema (Ws)</td>
+            <td>{{ resultados.Ws }}</td>
+        </tr>
+        <tr>
+            <td>Porcentaje de ocupación del servidor (U)</td>
+            <td>{{ resultados.U }}</td>
+        </tr>
+        <tr>
+            <td>Probabilidad de que las personas estén esperando (PLs)</td>
+            <td>{{ resultados.PLs }}</td>
+        </tr>
+        <tr>
+            <td>Tiempo de distracción (Ocio)</td>
+            <td>{{ resultados.Ocio }}</td>
+        </tr>
+        </tbody>
+    </table>
     {% endif %}
 
-    <a href="/" class="btn btn-secondary mt-4 w-100">
-        <i class="fas fa-arrow-left"></i> Regresar al Inicio
-    </a>
+    <a href="/" class="btn btn-secondary mt-4 w-100">Regresar al Inicio</a>
 </div>
 <footer>
     &copy; 2024 Investigación de Operaciones - ITESCAM | Creado por Emily Guadalupe y Juan David Rueda
 </footer>
-<!-- Bootstrap Bundle -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
