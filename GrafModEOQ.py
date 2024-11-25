@@ -34,21 +34,6 @@ def calcular_inventario_seguridad(desviacion_semanal, semanas, factor_seguridad)
     """
     desviacion_durante_entrega = desviacion_semanal * math.sqrt(semanas)
 
-    valores_z = {
-        50: 0.0,
-        60: 0.26,
-        70: 0.53,
-        75: 0.68,
-        80: 0.85,
-        85: 1.04,
-        90: 1.29,
-        95: 1.65,
-        96: 1.76,
-        97: 1.89,
-        98: 2.06,
-        99: 2.33
-    }
-
     z = 0.0
     if factor_seguridad <= 50:
         z = 0.0

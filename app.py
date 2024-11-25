@@ -116,6 +116,8 @@ def colas():
             # Validar que los valores sean mayores a 0
             if A <= 0 or S <= 0 or n <= 0:
                 mensaje_error = "Los valores de A, S y n deben ser mayores a 0."
+            elif A >= S:
+                mensaje_error = "La tasa de llegada (A) no puede ser mayor o igual a la tasa de servicio (S)."
             else:
                 # Crear instancia de Operations y calcular métricas
                 operations = Operations(A, S, n)
