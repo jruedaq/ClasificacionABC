@@ -33,9 +33,49 @@ def calcular_inventario_seguridad(desviacion_semanal, semanas, factor_seguridad)
     Fórmula: IS = Z * desviación_durante_entrega
     """
     desviacion_durante_entrega = desviacion_semanal * math.sqrt(semanas)
-    return factor_seguridad * desviacion_durante_entrega
 
+    valores_z = {
+        50: 0.0,
+        60: 0.26,
+        70: 0.53,
+        75: 0.68,
+        80: 0.85,
+        85: 1.04,
+        90: 1.29,
+        95: 1.65,
+        96: 1.76,
+        97: 1.89,
+        98: 2.06,
+        99: 2.33
+    }
 
+    z = 0.0
+    if factor_seguridad <= 50:
+        z = 0.0
+    elif factor_seguridad <=60:
+        z = 0.26
+    elif factor_seguridad <=70:
+        z = 0.53
+    elif factor_seguridad <=75:
+        z = 0.68
+    elif factor_seguridad <=80:
+        z = 0.85
+    elif factor_seguridad <=85:
+        z = 1.04
+    elif factor_seguridad <=90:
+        z = 1.29
+    elif factor_seguridad <=95:
+        z = 1.65
+    elif factor_seguridad <=96:
+        z = 1.76
+    elif factor_seguridad <=97:
+        z = 1.89
+    elif factor_seguridad <=98:
+        z = 2.06
+    elif factor_seguridad <=99:
+        z = 2.33
+
+    return z * desviacion_durante_entrega
 
 def mostrar_grafica(D, S, H, dias_trabajo, ruta):
     """
